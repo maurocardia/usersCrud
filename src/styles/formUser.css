@@ -1,0 +1,60 @@
+input {
+  margin-left: 2rem;
+}
+
+form > label {
+  width: 17rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
+  outline: none;
+  padding-left: 0.5rem;
+  border-radius: 0.4rem;
+  border-style: none;
+  box-shadow: inset 0px 0px 4px black;
+  background-color: rgba(255, 255, 255, 0.963);
+  color: black;
+}
+
+input::placeholder {
+  color: rgba(127, 127, 127, 0.347);
+}
+
+.containerGender {
+  width: 40%;
+  display: grid;
+  grid-template-rows: 0;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 2rem;
+}
+
+.containerStatus {
+  width: 40%;
+  display: grid;
+  grid-template-rows: 0;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.checkMale {
+  margin-left: 1rem;
+}
+
+.checkFemale {
+  margin-left: 1rem;
+}
+
+.active {
+  margin-left: 0.9rem;
+}
+
+.inactive {
+  margin-left: 1rem;
+}

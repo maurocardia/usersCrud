@@ -1,0 +1,34 @@
+.containerCardUser {
+  display: flex;
+  justify-content: center;
+}
+
+.cardUser {
+  margin-top: 3rem;
+  justify-content: center;
+  display: flex;
+}
+
+.buttonCard {
+  text-align: right;
+  position: relative;
+  left: -40vw;
+  bottom: 0vh;
+  background-color: transparent;
+  border-style: none;
+  transition: 500ms;
+}
+
+.buttonCard:hover {
+  color: aliceblue;
+  border-style: none;
+  margin-right: 1rem;
+}
+
+.buttonCard > svg {
+  font-size: 3rem;
+}
+
+.containerBtn {
+  position: absolute;
+}

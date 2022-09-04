@@ -1,0 +1,85 @@
+.containerListUsers {
+  padding: 2rem;
+}
+
+.twoButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonEdit::before {
+  transition: 0.2 ease;
+  position: absolute;
+}
+
+.buttonEdit::after {
+  content: "Edit";
+  opacity: 0;
+  font-size: 0.1px;
+  transition: 300ms;
+  position: absolute;
+  color: white;
+  text-shadow: 0px 0px 6px rgb(0, 0, 0);
+  right: 13.5vw;
+  bottom: 17rem;
+}
+
+.buttonEdit:hover::after {
+  opacity: 1;
+  font-size: 20px;
+  transform: translate(-50%-50%);
+}
+
+.buttonDelete::before {
+  transition: 0.2 ease;
+  position: absolute;
+}
+
+.buttonDelete::after {
+  content: "Delete";
+  opacity: 0;
+  font-size: 0.1px;
+  transition: 300ms;
+  position: absolute;
+  color: white;
+  text-shadow: 0px 0px 6px rgb(0, 0, 0);
+  right: 7.5vw;
+  bottom: 17rem;
+}
+
+.buttonDelete:hover::after {
+  opacity: 1;
+  font-size: 20px;
+  transform: translate(-50%-50%);
+}
+
+.buttonView::before {
+  transition: 0.2 ease;
+  position: absolute;
+}
+
+.buttonView::after {
+  content: "View";
+  opacity: 0;
+  font-size: 0.1px;
+  transition: 300ms;
+  position: absolute;
+  color: white;
+  text-shadow: 0px 0px 6px rgb(0, 0, 0);
+  right: 3vw;
+  bottom: 17rem;
+}
+
+.buttonView:hover::after {
+  opacity: 1;
+  font-size: 20px;
+  transform: translate(-50%-50%);
+}
+
+td {
+  align-content: center;
+}
+
+.twoButtons > button {
+  margin-left: 0.3rem;
+}

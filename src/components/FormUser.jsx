@@ -1,153 +1,228 @@
-import { Button, Form, Input, InputNumber } from "antd";
-import React, { useState } from "react";
-import { Checkbox } from "antd";
-import { useSelector,  useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import getConfig from "../utils/getConfig";
-import { setUpdateUser } from "../store/slices/updateUser.slice";
+import { useParams, useNavigate } from "react-router-dom";
+import { getUsersThunk } from "../store/slices/users.slice";
+import { notification } from "antd";
+import Button from "react-bootstrap/Button";
+import "../styles/formUser.css";
 
+const Context = React.createContext({
+  name: "Default",
+});
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-
-/* eslint-disable no-template-curly-in-string */
-
-const validateMessages = {
-  required: "${label} is required!",
-  types: {
-    email: "${label} is not a valid email!",
-    number: "${label} is not a valid number!",
-  },
-  number: {
-    range: "${label} must be between ${min} and ${max}",
-  },
-};
-/* eslint-enable no-template-curly-in-string */
-
-const FormUser = () => {
-  const onFinish = (values) => {
-    console.log(values);
-  };
+const FormUser = ({ openNotification }) => {
+  const params = useParams();
+  const { id } = params;
+  const updateUser = useSelector((state) => state.updateUser);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isGender, setIsGender] = useState(true);
-  const [isActive, setIsActive] = useState(true)
-  const [inputName, setInputName] = useState("")
-  const [inputEmail,setInputEmail] = useState("")
-  const dispatch = useDispatch()
-  const updateUser = useSelector(state => state.updateUser)
+  const [isActive, setIsActive] = useState(true);
+  const [inputName, setInputName] = useState();
+  const [inputEmail, setInputEmail] = useState("");
+  const [api, contextHolder] = notification.useNotification();
 
   const isGenderChange = () => {
-    setIsGender(!isGender); 
+    setIsGender(!isGender);
   };
 
-  const statusChange = () =>{
-    setIsActive(!isActive)
-  }
+  const statusChange = () => {
+    setIsActive(!isActive);
+  };
+
+  useEffect(() => {
+    const changeInput = () => {
+      let valGender = "";
+      let valActive = "";
+
+      if (updateUser.gender === "male") {
+        valGender = true;
+      } else {
+        valGender = false;
+      }
+
+      if (updateUser.status === "active") {
+        valActive = true;
+      } else {
+        valActive = false;
+      }
+
+      setIsGender(valGender);
+      setIsActive(valActive);
+      setInputEmail(updateUser.email);
+      setInputName(updateUser.name);
+    };
+    changeInput();
+  }, [updateUser]);
+
+  const resetInput = () => {
+    setIsGender(true);
+    setIsActive(true);
+    setInputEmail("");
+    setInputName("");
+  };
 
   const newUser = {
     name: inputName,
-    gender: (isGender? "male":"female"),
+    gender: isGender ? "male" : "female",
     email: inputEmail,
-    status: (isActive? "active":"inactive")
+    status: isActive ? "active" : "inactive",
+  };
 
-  }
+  const createNotification = (placement) => {
+    api.info({
+      message: `User ${placement}`,
+      description: (
+        <Context.Consumer>
+          {({ created }) => `It seccess, ${created}!`}
+        </Context.Consumer>
+      ),
+      placement,
+    });
+  };
 
-const handleSubmit=(e)=>{
-  e.preventDefault(
-    axios.post("https://gorest.co.in/public/v2/users",newUser,getConfig())
-  )
-}
+  const editedNotification = (placement) => {
+    api.info({
+      message: `User ${placement}`,
+      description: (
+        <Context.Consumer>
+          {({ edit }) => `It seccess, ${edit}!`}
+        </Context.Consumer>
+      ),
+      placement,
+    });
+  };
 
+  const errorNotification = (placement) => {
+    api.info({
+      message: `${placement}`,
+      description: (
+        <Context.Consumer>
+          {({}) => `the request could not be completed!`}
+        </Context.Consumer>
+      ),
+      placement,
+    });
+  };
 
- 
-console.log(newUser)
+  //create user or edit user
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!id) {
+      axios
+        .post("https://gorest.co.in/public/v2/users", newUser, getConfig())
+        .then(() => {
+          dispatch(getUsersThunk());
+          createNotification(inputName);
+          resetInput();
+        })
+        .catch((error) => {
+          console.log(error);
+          errorNotification(error.message);
+        });
+    } else {
+      axios
+        .patch(
+          `https://gorest.co.in/public/v2/users/${id}`,
+          newUser,
+          getConfig()
+        )
+        .then(() => {
+          dispatch(getUsersThunk());
+          editedNotification(inputName);
+          resetInput();
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          errorNotification(error.message);
+        });
+      navigate("/");
+    }
+  };
+
   return (
     <div className="containerForm">
-        <Form 
-        {...layout}
-        name="nest-messages"
-        onFinish={onFinish}
-        validateMessages={validateMessages}
-        onSubmit={handleSubmit}
-        >
-        <Form.Item
-            name={["user", "name"]}
-            label="Name"
-            rules={[
-            {
-                required: true,
-            },
-            ]}
-            onChange={e=>setInputName(e.target.value)}
-            value={inputName}
-        >
-            <Input />
-        </Form.Item>
-        <Form.Item
-            name={["user", "email"]}
-            label="Email"
-            rules={[
-            {
-                type: "email",
-            },
-            ]}
-            onChange={e=>setInputEmail(e.target.value)}
-            value={inputEmail}
-        >
-            <Input />
-        </Form.Item>
-        
-        <div>
-            <label>
+      <form onSubmit={handleSubmit}>
+        <label className="labelName">
+          Name User
+          <input
+            type="text"
+            value={inputName || ""}
+            onChange={(e) => setInputName(e.target.value)}
+            placeholder="Pepito perez"
+          />
+        </label>
+        <br />
+        <label>
+          Email
+          <input
+            type="text"
+            value={inputEmail || ""}
+            onChange={(e) => setInputEmail(e.target.value)}
+            placeholder="pepitopere@email.com"
+          />
+        </label>
+        <br />
+        <div className="containerGender">
+          Gender
+          <label>
             Male
-            <Checkbox
-                defaultChecked={false}
-                checked={isGender}
-                onChange={isGenderChange}
+            <input
+              type="checkbox"
+              onChange={isGenderChange}
+              checked={isGender}
+              className="checkMale"
             />
-            </label>
-            <label>
+          </label>
+          <label>
             Female
-            <Checkbox
-                defaultChecked={false}
-                checked={!isGender}
-                onChange={isGenderChange}
+            <input
+              type="checkbox"
+              onChange={isGenderChange}
+              checked={!isGender}
+              className="checkFemale"
             />
-            </label>
-            </div>
-            <div>
-
-            <label>
-            Active
-            <Checkbox
-                defaultChecked={false}
-                checked={isActive}
-                onChange={statusChange}
-            />
-            </label>
-            <label>
-            inactive
-            <Checkbox
-                defaultChecked={false}
-                checked={!isActive}
-                onChange={statusChange}
-            />
-            </label>
+          </label>
         </div>
-        
-
-         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
-            Submit
-            </Button>
-        </Form.Item>
-        </Form>
+        <div className="containerStatus">
+          Status
+          <label>
+            Active
+            <input
+              type="checkBox"
+              checked={isActive}
+              onChange={statusChange}
+              className="active"
+            />
+          </label>
+          <label>
+            inactive
+            <input
+              type="checkBox"
+              checked={!isActive}
+              onChange={statusChange}
+              className="inactive"
+            />
+          </label>
+          <br />
+        </div>
+        <Button variant="secondary" type="submit" size="sm">
+          {!id ? "Create user" : "Edit user"}
+        </Button>{" "}
+      </form>
+      <Context.Provider
+        value={{
+          created: "Created",
+          edit: "edited",
+        }}
+      >
+        {contextHolder}
+      </Context.Provider>
+      <br />
+      <br />
     </div>
   );
 };
