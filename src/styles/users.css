@@ -1,5 +1,6 @@
-.containerListUsers {
-  padding: 2rem;
+.table {
+  margin-top: 1rem;
+  margin: 0 2;
 }
 
 .twoButtons {
@@ -20,13 +21,13 @@
   position: absolute;
   color: white;
   text-shadow: 0px 0px 6px rgb(0, 0, 0);
-  right: 13.5vw;
-  bottom: 17rem;
+  right: 14.3vw;
+  bottom: 41.8vh;
 }
 
 .buttonEdit:hover::after {
   opacity: 1;
-  font-size: 20px;
+  font-size: 16px;
   transform: translate(-50%-50%);
 }
 
@@ -43,13 +44,13 @@
   position: absolute;
   color: white;
   text-shadow: 0px 0px 6px rgb(0, 0, 0);
-  right: 7.5vw;
-  bottom: 17rem;
+  right: 8vw;
+  bottom: 41.8vh;
 }
 
 .buttonDelete:hover::after {
   opacity: 1;
-  font-size: 20px;
+  font-size: 16px;
   transform: translate(-50%-50%);
 }
 
@@ -67,12 +68,13 @@
   color: white;
   text-shadow: 0px 0px 6px rgb(0, 0, 0);
   right: 3vw;
-  bottom: 17rem;
+  bottom: 41.8vh;
+  position: absolute;
 }
 
 .buttonView:hover::after {
   opacity: 1;
-  font-size: 20px;
+  font-size: 16px;
   transform: translate(-50%-50%);
 }
 

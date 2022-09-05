@@ -8,10 +8,18 @@ form > label {
   justify-content: space-between;
 }
 
+.containerForm {
+  width: 100%;
+  height: 15rem;
+}
+
 form {
+  padding-top: 2rem;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #002b36;
 }
 
 input {
@@ -34,6 +42,7 @@ input::placeholder {
   grid-template-rows: 0;
   grid-template-columns: 1fr 1fr 1fr;
   margin-bottom: 2rem;
+  max-width: 18.5rem;
 }
 
 .containerStatus {
@@ -41,6 +50,7 @@ input::placeholder {
   display: grid;
   grid-template-rows: 0;
   grid-template-columns: 1fr 1fr 1fr;
+  max-width: 18.5rem;
 }
 
 .checkMale {
@@ -57,4 +67,24 @@ input::placeholder {
 
 .inactive {
   margin-left: 1rem;
+}
+
+@media only screen and (max-width: 676px) and (min-width: 300px) {
+  .containerGender {
+    width: 70%;
+  }
+
+  .containerStatus {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 414px) and (min-width: 250px) {
+  .containerGender {
+    width: 97%;
+  }
+
+  .containerStatus {
+    width: 97%;
+  }
 }

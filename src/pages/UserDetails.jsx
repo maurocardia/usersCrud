@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BiArrowBack } from "react-icons/bi";
 import "../styles/userDetails.css";
@@ -14,13 +14,13 @@ const UserDetails = () => {
   const { id } = params;
   const updateUser = useSelector((state) => state.updateUser);
   const navigate = useNavigate();
+  const genderUser = updateUser.gender;
 
-  useEffect((id) => {
-    axios.get(`https://randomuser.me/api/?gender=female`).then((res) => {
+  useEffect(() => {
+    axios.get(`https://randomuser.me/api/`).then((res) => {
       setImageUser(res.data.results[0]);
     });
   }, []);
-  console.log(id);
 
   return (
     <div className="containerCardUser">

@@ -12,19 +12,20 @@ const Context = React.createContext({
   name: "Default",
 });
 
-const FormUser = ({ openNotification }) => {
-  const params = useParams();
-  const { id } = params;
+const FormUser = () => {
   const updateUser = useSelector((state) => state.updateUser);
+  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const params = useParams();
+  const { id } = params;
+  //states for controlled inputs
   const [isGender, setIsGender] = useState(true);
   const [isActive, setIsActive] = useState(true);
   const [inputName, setInputName] = useState();
   const [inputEmail, setInputEmail] = useState("");
-  const [api, contextHolder] = notification.useNotification();
 
+  // functions to select only one checkbox
   const isGenderChange = () => {
     setIsGender(!isGender);
   };
@@ -33,11 +34,12 @@ const FormUser = ({ openNotification }) => {
     setIsActive(!isActive);
   };
 
+  // initial load hook to set updateUser global state parameters
   useEffect(() => {
     const changeInput = () => {
       let valGender = "";
       let valActive = "";
-
+      //conditional to convert boolean values ​​by gender
       if (updateUser.gender === "male") {
         valGender = true;
       } else {
@@ -49,7 +51,7 @@ const FormUser = ({ openNotification }) => {
       } else {
         valActive = false;
       }
-
+      //values ​​to load when the global UpdateUser state changes
       setIsGender(valGender);
       setIsActive(valActive);
       setInputEmail(updateUser.email);
@@ -57,7 +59,7 @@ const FormUser = ({ openNotification }) => {
     };
     changeInput();
   }, [updateUser]);
-
+  //function to reset the inputs after submitting the user
   const resetInput = () => {
     setIsGender(true);
     setIsActive(true);
@@ -65,6 +67,7 @@ const FormUser = ({ openNotification }) => {
     setInputName("");
   };
 
+  //new user that will be sent as the body of the request
   const newUser = {
     name: inputName,
     gender: isGender ? "male" : "female",
@@ -72,6 +75,7 @@ const FormUser = ({ openNotification }) => {
     status: isActive ? "active" : "inactive",
   };
 
+  //functions to execute the notifications component
   const createNotification = (placement) => {
     api.info({
       message: `User ${placement}`,
@@ -108,9 +112,11 @@ const FormUser = ({ openNotification }) => {
     });
   };
 
-  //create user or edit user
+  //function  create user or edit user
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    //conditional that will determine if lancion creates the user or modifies it
     if (!id) {
       axios
         .post("https://gorest.co.in/public/v2/users", newUser, getConfig())
@@ -209,6 +215,7 @@ const FormUser = ({ openNotification }) => {
           </label>
           <br />
         </div>
+        <br />
         <Button variant="secondary" type="submit" size="sm">
           {!id ? "Create user" : "Edit user"}
         </Button>{" "}
